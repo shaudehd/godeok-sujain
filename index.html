@@ -312,6 +312,8 @@ input[type=range]::-moz-range-track{height:12px;border-radius:7px;background:tra
 <div class="toast" id="toast"></div>
 
 <script>
+if("serviceWorker" in navigator){window.addEventListener("load",function(){navigator.serviceWorker.register("sw.js").catch(function(){})});}
+
 var D={
  "84A":{area:"84.8390㎡",a:[510900000,516500000,527700000,539000000,550200000,561400000,567100000],b:[512900000,518600000,530000000,541400000,552700000,564100000,569800000],balc:4500000},
  "84B":{area:"84.9914㎡",a:[510500000,516200000,527400000,538600000,549800000,561000000,566600000],b:[511000000,516700000,528100000,539500000,550800000,562200000,567900000],balc:6000000},
