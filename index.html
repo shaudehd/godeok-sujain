@@ -156,6 +156,11 @@ input[type=range]::-moz-range-track{height:12px;border-radius:7px;background:tra
 .btn{flex:1;border:0;border-radius:15px;padding:16px 8px;font-size:15px;font-weight:800;cursor:pointer;transition:.15s}
 .btn:active{transform:scale(.97)}
 .btn.kakao{background:linear-gradient(135deg,var(--coral2) 0%,var(--coral) 100%);color:#fff;box-shadow:0 8px 20px rgba(196,100,63,.4)}
+.btn.sms{background:linear-gradient(135deg,#1a5a8a,#2d7ab5);color:#fff;box-shadow:0 8px 20px rgba(26,90,138,.35)}
+.btn.mail{background:linear-gradient(135deg,#6a4bbf,#8a6ce0);color:#fff;box-shadow:0 8px 20px rgba(106,75,191,.35)}
+.btns .in{flex-wrap:wrap}
+.btns .btn{flex:1 1 30%;min-width:88px;font-size:14px;padding:15px 4px}
+.btns .btn.copy{flex:1 1 30%}
 .btn.copy{background:var(--card);color:var(--g);border:1.5px solid rgba(10,63,43,.35)}
 .toast{position:fixed;bottom:108px;left:50%;transform:translateX(-50%);background:rgba(26,36,31,.94);color:#fff;padding:11px 20px;border-radius:26px;font-size:13px;opacity:0;transition:.25s;pointer-events:none;z-index:9;white-space:nowrap}
 .toast.on{opacity:1}
@@ -305,6 +310,8 @@ input[type=range]::-moz-range-track{height:12px;border-radius:7px;background:tra
   <button class="btn copy" onclick="copyT()">복사</button>
   <button class="btn a4" onclick="showSheet()">상세 견적서</button>
   <button class="btn kakao" onclick="sendKakao()">카톡</button>
+  <button class="btn sms" onclick="sendSMS()">문자</button>
+  <button class="btn mail" onclick="sendMail()">이메일</button>
 </div></div>
 <div class="toast" id="toast"></div>
 
@@ -413,6 +420,15 @@ function sendKakao(){
  var m=msg();
  if(navigator.share){navigator.share({text:m}).catch(function(){})}
  else{copyT(function(){location.href="kakaotalk://"})}
+}
+function sendSMS(){
+ var m=msg(),p="";
+ if(navigator.share){navigator.share({text:m}).catch(function(){copyT(function(){location.href="sms:"+p+"?body="+encodeURIComponent(m)})})}
+ else{location.href="sms:"+p+"?body="+encodeURIComponent(m)}
+}
+function sendMail(){
+ var m=msg(),sub="【고덕 수자인&풍경채&하우스디】 견적 안내";
+ location.href="mailto:?subject="+encodeURIComponent(sub)+"&body="+encodeURIComponent(m);
 }
 function copyT(cb){
  var m=msg();
