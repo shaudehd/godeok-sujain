@@ -430,23 +430,6 @@ function sheetMsg(){
  (balcOn?"□ 발코니 확장: 포함 — 확장비 "+won(d.balc)+", 총액 "+won(c.p+d.balc)+"\n":"□ 발코니 확장(옵션): "+won(d.balc)+"\n")+
  bar+"\n상담 문의: 노명수 010-3144-0016\n※ 모집공고 기준 · 대출 조건은 금융기관 승인에 따라 달라질 수 있습니다";
 }
-function sendSMS(){
- var m=sheetMsg(),p="";
- location.href="sms:"+p+"?body="+encodeURIComponent(m);
-}
-function sendMail(){
- var m=sheetMsg(),sub="【고덕 수자인&풍경채&하우스디】 상세 견적서 — "+(document.getElementById("cust").value.trim()||"고객님");
- location.href="mailto:?subject="+encodeURIComponent(sub)+"&body="+encodeURIComponent(m);
-}
-function oldSendSMS(){
- var m=msg(),p="";
- if(navigator.share){navigator.share({text:m}).catch(function(){copyT(function(){location.href="sms:"+p+"?body="+encodeURIComponent(m)})})}
- else{location.href="sms:"+p+"?body="+encodeURIComponent(m)}
-}
-function sendMail(){
- var m=msg(),sub="【고덕 수자인&풍경채&하우스디】 견적 안내";
- location.href="mailto:?subject="+encodeURIComponent(sub)+"&body="+encodeURIComponent(m);
-}
 function copyT(cb){
  var m=msg();
  if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(m).then(function(){toast("견적 메시지를 복사했어요");if(cb)cb()},function(){fallbackCopy(m,cb)})}
