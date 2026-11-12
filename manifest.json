@@ -1,0 +1,22 @@
+{
+ "name": "고덕 수자인&풍경채&하우스디 견적",
+ "short_name": "고덕 견적",
+ "start_url": "./",
+ "display": "standalone",
+ "background_color": "#08331f",
+ "theme_color": "#08331f",
+ "icons": [
+  {
+   "src": "icon.png",
+   "sizes": "512x512",
+   "type": "image/png",
+   "purpose": "any"
+  },
+  {
+   "src": "icon.png",
+   "sizes": "512x512",
+   "type": "image/png",
+   "purpose": "maskable"
+  }
+ ]
+}
