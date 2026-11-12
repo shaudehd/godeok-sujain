@@ -156,11 +156,7 @@ input[type=range]::-moz-range-track{height:12px;border-radius:7px;background:tra
 .btn{flex:1;border:0;border-radius:15px;padding:16px 8px;font-size:15px;font-weight:800;cursor:pointer;transition:.15s}
 .btn:active{transform:scale(.97)}
 .btn.kakao{background:linear-gradient(135deg,var(--coral2) 0%,var(--coral) 100%);color:#fff;box-shadow:0 8px 20px rgba(196,100,63,.4)}
-.btn.sms{background:linear-gradient(135deg,#1a5a8a,#2d7ab5);color:#fff;box-shadow:0 8px 20px rgba(26,90,138,.35)}
-.btn.mail{background:linear-gradient(135deg,#6a4bbf,#8a6ce0);color:#fff;box-shadow:0 8px 20px rgba(106,75,191,.35)}
-.btns .in{flex-wrap:wrap}
-.btns .btn{flex:1 1 30%;min-width:88px;font-size:14px;padding:15px 4px}
-.btns .btn.copy{flex:1 1 30%}
+
 .btn.copy{background:var(--card);color:var(--g);border:1.5px solid rgba(10,63,43,.35)}
 .toast{position:fixed;bottom:108px;left:50%;transform:translateX(-50%);background:rgba(26,36,31,.94);color:#fff;padding:11px 20px;border-radius:26px;font-size:13px;opacity:0;transition:.25s;pointer-events:none;z-index:9;white-space:nowrap}
 .toast.on{opacity:1}
@@ -270,7 +266,8 @@ input[type=range]::-moz-range-track{height:12px;border-radius:7px;background:tra
 
   <div class="sheet" id="sheet">
     <div class="sh-head">
-      <div class="t">📄 상세 견적서 (A4 1장)</div>
+      <div class="c" style="font-size:10px;letter-spacing:3px;color:var(--gold2)">ESTIMATE</div>
+      <div class="t serif">상세 견적서</div>
       <div class="d" id="shMeta"></div>
     </div>
     <div class="sh-body">
@@ -310,8 +307,7 @@ input[type=range]::-moz-range-track{height:12px;border-radius:7px;background:tra
   <button class="btn copy" onclick="copyT()">복사</button>
   <button class="btn a4" onclick="showSheet()">상세 견적서</button>
   <button class="btn kakao" onclick="sendKakao()">카톡</button>
-  <button class="btn sms" onclick="sendSMS()">문자</button>
-  <button class="btn mail" onclick="sendMail()">이메일</button>
+
 </div></div>
 <div class="toast" id="toast"></div>
 
@@ -413,7 +409,7 @@ function showSheet(){
   var r=sh.getBoundingClientRect();
   window.scrollTo({top:r.top+window.scrollY-10,behavior:"smooth"});
  },60);
- toast("상세 견적서를 아래에 펼쳤어요");
+ toast("PDF로 저장해 카톡으로 파일 전송하세요");
 }
 function toast(t){var el=document.getElementById("toast");el.textContent=t;el.classList.add("on");setTimeout(function(){el.classList.remove("on")},1800)}
 function sendKakao(){
