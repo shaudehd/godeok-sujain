@@ -121,6 +121,11 @@ input[type=range]::-moz-range-track{height:12px;border-radius:7px;background:tra
 .loan-sum.on{display:block;animation:rise .3s ease}
 .loan-sum b{font-size:13.5px}
 
+.sh-btns{margin-top:14px;text-align:center}
+.shkakao{width:100%;border:0;border-radius:14px;padding:15px 10px;font-size:15px;font-weight:800;font-family:inherit;cursor:pointer;background:linear-gradient(135deg,var(--coral2) 0%,var(--coral) 100%);color:#fff;box-shadow:0 8px 20px rgba(196,100,63,.4);transition:.15s}
+.shkakao:active{transform:scale(.97)}
+.shhint{display:block;margin-top:8px;font-size:11px;color:var(--mut)}
+
 /* ── 가이드·푸터 ───────────────────────── */
 .guide{margin-top:24px;background:var(--card);border-radius:14px;padding:15px 17px;border:1px solid var(--line)}
 .guide h3{font-size:13px;color:var(--g);margin-bottom:9px;font-weight:800}
@@ -145,7 +150,7 @@ input[type=range]::-moz-range-track{height:12px;border-radius:7px;background:tra
 @media print{
  body{padding-bottom:0;background:#fff}
  .wrap>*:not(.sheet){display:none!important}
- .btns,.toast{display:none!important}
+ .btns,.toast,.sh-btns{display:none!important}
  .sheet{display:block!important;margin:0;border:0;border-radius:0;box-shadow:none}
  .sheet .sh-body{padding:8px 0}
 }
@@ -288,6 +293,7 @@ input[type=range]::-moz-range-track{height:12px;border-radius:7px;background:tra
         <tr id="shBalcRow"><td class="l">발코니 확장 (옵션)</td><td id="shBalc">—</td></tr>
       </table>
       <div class="sched" id="shSched"></div>
+      <div class="sh-btns"><button type="button" class="shkakao" onclick="sendSheetKakao()">💬 상세 견적서 카톡으로 보내기</button><span class="shhint">요약이 아니라 위 상세 견적서 내용 전체가 전송됩니다 · PDF로 저장해 파일로 보내려면 크롬 ⋮ → 인쇄</span></div>
       <div class="memo">※ 본 견적은 모집공고 기준이며, 실제 계약 조건·대출 조건은 금융기관 승인에 따라 달라질 수 있습니다.<br>상담 문의: 노명수 010-3144-0016 · 담당자 인쇄 후 A4 1장으로 고객 전달 가능</div>
     </div>
   </div>
@@ -402,6 +408,15 @@ function msg(){
  "□ 잔금(35%): "+won(c.bal)+" (입주지정일)\n\n"+
  "상담 문의: 노명수 010-3144-0016";
  return m;
+}
+function sendSheetKakao(){
+ var m=sheetMsg();
+ if(navigator.share){navigator.share({text:m}).catch(function(){})}
+ else{copyText(m,function(){toast("상세 견적서를 복사했어요");location.href="kakaotalk://"})}
+}
+function copyText(m,cb){
+ if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(m).then(cb,function(){fallbackCopy(m,cb)})}
+ else{fallbackCopy(m,cb)}
 }
 function showSheet(){
  render();
