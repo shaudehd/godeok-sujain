@@ -138,7 +138,7 @@ input[type=range]::-moz-range-track{height:12px;border-radius:7px;background:tra
 .foot .fbar{width:34px;height:1.5px;background:linear-gradient(90deg,transparent,var(--gold),transparent);margin:12px auto 10px}
 
 /* ── A4 상세 견적서 시트 ───────────────────────── */
-.sheet{margin-top:24px;background:var(--card);border:1.5px solid var(--line);border-radius:16px;box-shadow:var(--sh);overflow:hidden;display:none}
+.sheet{margin-top:24px;background:var(--card);border:1.5px solid var(--line);border-radius:16px;box-shadow:var(--sh);overflow:hidden;display:block}
 .sheet.on{display:block}
 .sheet .sh-head{background:linear-gradient(155deg,#08331f,#0d4a50 0%,#0d4a30 50%,#1d7a50 100%);color:#fff;padding:20px 18px;text-align:center}
 .sheet .sh-head .t{font-size:17px;font-weight:800;letter-spacing:-.3px}
@@ -404,7 +404,6 @@ function render(){
  if(balcOn){bs.classList.add("on");bs.innerHTML="발코니 확장 "+won(d.balc)+" 포함 시 — 계약금 "+won(d.balc*0.1)+" / 중도금 "+won(d.balc*0.1)+" / 잔금 "+won(d.balc*0.8)+"<br><b>발코니 포함 총액 "+won(c.p+d.balc)+"</b>"}
  else{bs.classList.remove("on")}
  var q=document.getElementById("quote");q.classList.remove("on");void q.offsetWidth;q.classList.add("on");
- document.getElementById("sheet").classList.add("on");
 }
 function msg(){
  var d=D[type],c=calc(),cust=document.getElementById("cust").value.trim()||"고객님",sc=SCHED[zone];
@@ -440,12 +439,10 @@ function copyText(m,cb){
 function showSheet(){
  render();
  var sh=document.getElementById("sheet");
- sh.classList.add("on");
  setTimeout(function(){
   var r=sh.getBoundingClientRect();
   window.scrollTo({top:r.top+window.scrollY-10,behavior:"smooth"});
  },60);
- toast("PDF로 저장해 카톡으로 파일 전송하세요");
 }
 function toast(t){var el=document.getElementById("toast");el.textContent=t;el.classList.add("on");setTimeout(function(){el.classList.remove("on")},1800)}
 function sendKakao(){
