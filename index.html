@@ -421,7 +421,28 @@ function sendKakao(){
  if(navigator.share){navigator.share({text:m}).catch(function(){})}
  else{copyT(function(){location.href="kakaotalk://"})}
 }
+function sheetMsg(){
+ var c=calc(),d=D[type],cust=document.getElementById("cust").value.trim()||"고객님",sc=SCHED[zone];
+ var dirv=document.getElementById("dir").value.trim();
+ var bar="",rows=[];for(var i=0;i<28;i++)bar+="─";
+ return "【상세 견적서】\n"+cust+"님\n"+ZNAME[zone]+" · "+type+"타입("+d.area+") · "+bandLabel(fl)+(unit?" · "+unit:"")+(dirv?" · "+dirv:"")+" · 작성일 "+new Date().toLocaleDateString("ko-KR")+"\n"+bar+"\n"+
+ "■ 총 분양가(부가세 포함): "+won(c.p)+"\n"+
+ "□ 계약금(5%): "+won(c.cg)+"\n  · 계약 시 "+won(c.c1)+"\n  · 계약 후 30일 이내 "+won(c.c2)+"\n"+
+ "□ 중도금(60%): "+won(c.mid)+" × 6회차\n"+sc.map(function(dt,i){return "  · "+(i+1)+"차 "+dt+" — "+won(c.mid)}).join("\n")+"\n"+
+ "□ 잔금(35%): "+won(c.bal)+" (입주지정일)\n"+
+ "□ 대출: "+Math.round(loan*100)+"% / 연 "+rate.toFixed(1)+"% — 대출금 "+won(c.la)+", 월 이자 약 "+manwon(c.mi)+" (연 약 "+manwon(c.mi*12)+")\n"+
+ (balcOn?"□ 발코니 확장: 포함 — 확장비 "+won(d.balc)+", 총액 "+won(c.p+d.balc)+"\n":"□ 발코니 확장(옵션): "+won(d.balc)+"\n")+
+ bar+"\n상담 문의: 노명수 010-3144-0016\n※ 모집공고 기준 · 대출 조건은 금융기관 승인에 따라 달라질 수 있습니다";
+}
 function sendSMS(){
+ var m=sheetMsg(),p="";
+ location.href="sms:"+p+"?body="+encodeURIComponent(m);
+}
+function sendMail(){
+ var m=sheetMsg(),sub="【고덕 수자인&풍경채&하우스디】 상세 견적서 — "+(document.getElementById("cust").value.trim()||"고객님");
+ location.href="mailto:?subject="+encodeURIComponent(sub)+"&body="+encodeURIComponent(m);
+}
+function oldSendSMS(){
  var m=msg(),p="";
  if(navigator.share){navigator.share({text:m}).catch(function(){copyT(function(){location.href="sms:"+p+"?body="+encodeURIComponent(m)})})}
  else{location.href="sms:"+p+"?body="+encodeURIComponent(m)}
