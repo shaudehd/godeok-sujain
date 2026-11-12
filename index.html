@@ -128,6 +128,28 @@ input[type=range]::-moz-range-track{height:12px;border-radius:7px;background:tra
 .foot{text-align:center;font-size:11px;color:#96a49c;margin-top:22px;line-height:1.8;padding:0 10px}
 .foot .fbar{width:34px;height:1.5px;background:linear-gradient(90deg,transparent,var(--gold),transparent);margin:12px auto 10px}
 
+/* ── A4 상세 견적서 시트 ───────────────────────── */
+.sheet{margin-top:24px;background:var(--card);border:1.5px solid var(--line);border-radius:16px;box-shadow:var(--sh);overflow:hidden;display:none}
+.sheet.on{display:block}
+.sheet .sh-head{background:linear-gradient(155deg,#08331f,#0d4a50 0%,#0d4a30 50%,#1d7a50 100%);color:#fff;padding:20px 18px;text-align:center}
+.sheet .sh-head .t{font-size:17px;font-weight:800;letter-spacing:-.3px}
+.sheet .sh-head .d{font-size:11px;opacity:.75;margin-top:4px}
+.sheet .sh-body{padding:16px 18px}
+.sheet table{width:100%;border-collapse:collapse;font-size:12.5px}
+.sheet th{background:#eef4f0;color:var(--g);font-size:11.5px;padding:8px 6px;border:1px solid var(--line);font-weight:800}
+.sheet td{padding:8px 6px;border:1px solid var(--line);text-align:center;font-weight:600}
+.sheet td.l{text-align:left;font-weight:700}
+.sheet tr.tot td{background:#fdf9ef;font-weight:800;font-size:13.5px;color:var(--g)}
+.sheet .memo{margin-top:12px;font-size:11px;color:var(--mut);line-height:1.9;background:var(--cream);border:1px solid var(--line);border-radius:11px;padding:10px 13px}
+.btn.a4{background:linear-gradient(135deg,#0d4a30,#1a7050);color:#fff;box-shadow:0 8px 20px rgba(10,63,43,.35)}
+@media print{
+ body{padding-bottom:0;background:#fff}
+ .wrap>*:not(.sheet){display:none!important}
+ .btns,.toast{display:none!important}
+ .sheet{display:block!important;margin:0;border:0;border-radius:0;box-shadow:none}
+ .sheet .sh-body{padding:8px 0}
+}
+@media (min-width:800px){.btns .in{max-width:520px}}
 /* ── 하단 버튼 ───────────────────────── */
 .btns{position:fixed;bottom:0;left:0;right:0;background:linear-gradient(to top,var(--bg) 72%,transparent);padding:14px 16px 20px;z-index:5}
 .btns .in{max-width:520px;margin:0 auto;display:flex;gap:10px}
@@ -241,6 +263,33 @@ input[type=range]::-moz-range-track{height:12px;border-radius:7px;background:tra
     </div>
   </div>
 
+  <div class="sheet" id="sheet">
+    <div class="sh-head">
+      <div class="t">📄 상세 견적서 (A4 1장)</div>
+      <div class="d" id="shMeta"></div>
+    </div>
+    <div class="sh-body">
+      <table>
+        <tr><th colspan="2" style="text-align:left">■ 기본 정보</th></tr>
+        <tr><td class="l" style="width:34%">단지</td><td id="shZone">—</td></tr>
+        <tr><td class="l">타입 / 면적</td><td id="shType">—</td></tr>
+        <tr><td class="l">층 / 동·호</td><td id="shFloor">—</td></tr>
+        <tr><td class="l">방향</td><td id="shDir">—</td></tr>
+        <tr><th colspan="2" style="text-align:left">■ 분양 조건</th></tr>
+        <tr><td class="l">총 분양가 (부가세 포함)</td><td id="shPrice">—</td></tr>
+        <tr><td class="l">계약금 (5%)</td><td id="shCont">—</td></tr>
+        <tr><td class="l" style="padding-left:14px">· 계약 시</td><td id="shCont1">—</td></tr>
+        <tr><td class="l" style="padding-left:14px">· 계약 후 30일 이내</td><td id="shCont2">—</td></tr>
+        <tr><td class="l">중도금 (60%) × 6회차</td><td id="shMid">—</td></tr>
+        <tr><td class="l">잔금 (35%) — 입주지정일</td><td id="shBal">—</td></tr>
+        <tr id="shLoanRow"><td class="l">대출 — 비율/금리/이자</td><td id="shLoan">—</td></tr>
+        <tr id="shBalcRow"><td class="l">발코니 확장 (옵션)</td><td id="shBalc">—</td></tr>
+      </table>
+      <div class="sched" id="shSched"></div>
+      <div class="memo">※ 본 견적은 모집공고 기준이며, 실제 계약 조건·대출 조건은 금융기관 승인에 따라 달라질 수 있습니다.<br>상담 문의: 노명수 010-3144-0016 · 담당자 인쇄 후 A4 1장으로 고객 전달 가능</div>
+    </div>
+  </div>
+
   <div class="guide">
     <h3>📱 이 견적서를 앱처럼 쓰기 (3단계)</h3>
     <ol>
@@ -254,7 +303,8 @@ input[type=range]::-moz-range-track{height:12px;border-radius:7px;background:tra
 </div>
 <div class="btns"><div class="in">
   <button class="btn copy" onclick="copyT()">복사</button>
-  <button class="btn kakao" onclick="sendKakao()">카톡으로 견적 보내기</button>
+  <button class="btn a4" onclick="showSheet()">A4 상세</button>
+  <button class="btn kakao" onclick="sendKakao()">카톡</button>
 </div></div>
 <div class="toast" id="toast"></div>
 
@@ -313,7 +363,22 @@ function render(){
  document.getElementById("loanAmt").textContent="대출금 "+won(c.la);
   document.getElementById("rateVal").textContent=rate.toFixed(1)+"%";
  document.getElementById("rateAmt").textContent="월 이자 "+manwon(c.mi);
-  var bs=document.getElementById("balcSum");
+ var dirv=document.getElementById("dir").value.trim();
+ document.getElementById("shMeta").textContent=cust+" · "+ZNAME[zone]+" · "+type+" 타입 · "+bandLabel(fl)+(unit?" · "+unit:"")+(dirv?" · "+dirv:"")+" · 작성일 "+new Date().toLocaleDateString("ko-KR");
+ document.getElementById("shZone").textContent=ZNAME[zone];
+ document.getElementById("shType").textContent=type+" ("+d.area+")";
+ document.getElementById("shFloor").textContent=bandLabel(fl)+(unit?" · "+unit:"");
+ document.getElementById("shDir").textContent=dirv||"—";
+ document.getElementById("shPrice").textContent=won(c.p);
+ document.getElementById("shCont").textContent=won(c.cg);
+ document.getElementById("shCont1").textContent=won(c.c1);
+ document.getElementById("shCont2").textContent=won(c.c2);
+ document.getElementById("shMid").textContent=won(c.mid)+" × 6회차";
+ document.getElementById("shBal").textContent=won(c.bal);
+ document.getElementById("shLoan").textContent=Math.round(loan*100)+"% / 연 "+rate.toFixed(1)+"% — 대출금 "+won(c.la)+", 월 이자 약 "+manwon(c.mi)+" (연 약 "+manwon(c.mi*12)+")";
+ document.getElementById("shBalc").textContent=balcOn?"포함 — 확장비 "+won(d.balc)+", 총액 "+won(c.p+d.balc):"미포함 — 확장비 "+won(d.balc);
+ document.getElementById("shSched").innerHTML="<b>【중도금 납부 일정】</b><br>"+sc.map(function(dt,i){return "· "+(i+1)+"차 "+dt+" — "+won(c.mid)}).join("<br>");
+ var bs=document.getElementById("balcSum");
  if(balcOn){bs.classList.add("on");bs.innerHTML="발코니 확장 "+won(d.balc)+" 포함 시 — 계약금 "+won(d.balc*0.1)+" / 중도금 "+won(d.balc*0.1)+" / 잔금 "+won(d.balc*0.8)+"<br><b>발코니 포함 총액 "+won(c.p+d.balc)+"</b>"}
  else{bs.classList.remove("on")}
  var q=document.getElementById("quote");q.classList.remove("on");void q.offsetWidth;q.classList.add("on");
@@ -331,6 +396,11 @@ function msg(){
  "□ 잔금(35%): "+won(c.bal)+" (입주지정일)\n\n"+
  "상담 문의: 노명수 010-3144-0016";
  return m;
+}
+function showSheet(){
+ render();
+ var q=document.getElementById("sheet").getBoundingClientRect().top+window.scrollY;
+ window.scrollTo({top:q-8,behavior:"smooth"});
 }
 function toast(t){var el=document.getElementById("toast");el.textContent=t;el.classList.add("on");setTimeout(function(){el.classList.remove("on")},1800)}
 function sendKakao(){
