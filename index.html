@@ -303,7 +303,7 @@ input[type=range]::-moz-range-track{height:12px;border-radius:7px;background:tra
 </div>
 <div class="btns"><div class="in">
   <button class="btn copy" onclick="copyT()">복사</button>
-  <button class="btn a4" onclick="showSheet()">A4 상세</button>
+  <button class="btn a4" onclick="showSheet()">상세 견적서</button>
   <button class="btn kakao" onclick="sendKakao()">카톡</button>
 </div></div>
 <div class="toast" id="toast"></div>
@@ -382,6 +382,7 @@ function render(){
  if(balcOn){bs.classList.add("on");bs.innerHTML="발코니 확장 "+won(d.balc)+" 포함 시 — 계약금 "+won(d.balc*0.1)+" / 중도금 "+won(d.balc*0.1)+" / 잔금 "+won(d.balc*0.8)+"<br><b>발코니 포함 총액 "+won(c.p+d.balc)+"</b>"}
  else{bs.classList.remove("on")}
  var q=document.getElementById("quote");q.classList.remove("on");void q.offsetWidth;q.classList.add("on");
+ document.getElementById("sheet").classList.add("on");
 }
 function msg(){
  var d=D[type],c=calc(),cust=document.getElementById("cust").value.trim()||"고객님",sc=SCHED[zone];
@@ -399,8 +400,13 @@ function msg(){
 }
 function showSheet(){
  render();
- var q=document.getElementById("sheet").getBoundingClientRect().top+window.scrollY;
- window.scrollTo({top:q-8,behavior:"smooth"});
+ var sh=document.getElementById("sheet");
+ sh.classList.add("on");
+ setTimeout(function(){
+  var r=sh.getBoundingClientRect();
+  window.scrollTo({top:r.top+window.scrollY-10,behavior:"smooth"});
+ },60);
+ toast("상세 견적서를 아래에 펼쳤어요");
 }
 function toast(t){var el=document.getElementById("toast");el.textContent=t;el.classList.add("on");setTimeout(function(){el.classList.remove("on")},1800)}
 function sendKakao(){
