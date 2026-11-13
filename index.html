@@ -225,9 +225,14 @@ input[type=range]::-moz-range-track{height:12px;border-radius:7px;background:tra
       </select><span class="arr">▾</span></div>
     </div>
     <div class="selrow">
-      <label class="sellab">동·호</label>
-      <div class="selwrap"><select id="selUnit"><option value="">선택 안 함</option></select><span class="arr">▾</span></div>
+      <label class="sellab">동</label>
+      <div class="selwrap"><select id="selDong"><option value="">동 선택</option></select><span class="arr">▾</span></div>
     </div>
+    <div class="selrow">
+      <label class="sellab">호</label>
+      <div class="selwrap"><select id="selHo"><option value="">호 선택</option></select><span class="arr">▾</span></div>
+    </div>
+    <div class="stephint" style="padding:0 4px">동을 먼저 고르면 그 동의 호수가 나옵니다 · 층(가격 기준)은 위에서 선택</div>
   </div>
 
   <div class="sect">
@@ -360,13 +365,18 @@ var SCHED={a:["2026. 9. 25.","2027. 1. 25.","2027. 6. 25.","2027. 11. 25.","2028
 var ZNAME={a:"14·61BL 수자인&풍경채",b:"67BL 수자인 하우스디"};
 var DEP={a:10000000,b:5000000};
 var zone="a",type="84A",fl=4,balcOn=false,loan=0.5,rate=3.5;
-var UNITS={
- "84A":{a:["1401동~1406동 1호","1405동 1,3,4호","6101동·6105동 2,3호","6102동~6104동 4호"],b:["6701동 1호","6703동 1,3,4호","6704동 1호"]},
- "84B":{a:["1401동~1406동 2호","6101동·6105동 4호","6102동~6104동 3호"],b:["6701동 2호","6702동 2호","6703동 2호","6704동 2호"]},
- "84C":{a:["1401동~1404동 5호","6101동·6103동·6105동 1호","6104동 5호"],b:["6701동 5호","6703동 5호","6704동 5호"]},
- "101":{a:["1401동~1406동 3,4호","6101동·6105동 5호","6102동·6104동 1,2호","6103동 2,4호"],b:["6701동 2,3호","6702동 1,3,4호","6704동 3,4호"]}
+var DONGS={
+ "84A":{a:{"1401":[1],"1402":[1],"1403":[1],"1404":[1],"1405":[1,3,4],"1406":[1],"6101":[2,3],"6102":[4],"6103":[4],"6104":[4],"6105":[2,3]},
+        b:{"6701":[1],"6703":[1,3,4],"6704":[1]}},
+ "84B":{a:{"1401":[2],"1402":[2],"1403":[2],"1404":[2],"1405":[2],"1406":[2],"6101":[4],"6102":[3],"6103":[3],"6104":[3],"6105":[4]},
+        b:{"6701":[2],"6702":[2],"6703":[2],"6704":[2]}},
+ "84C":{a:{"1401":[5],"1402":[5],"1403":[5],"1404":[5],"6101":[1],"6103":[1],"6104":[5],"6105":[1]},
+        b:{"6701":[5],"6703":[5],"6704":[5]}},
+ "101":{a:{"1401":[3,4],"1402":[3,4],"1403":[3,4],"1404":[3,4],"1405":[3,4],"1406":[3,4],"6101":[5],"6102":[1,2],"6103":[2,4],"6104":[1,2],"6105":[5]},
+        b:{"6701":[2,3],"6702":[1,3,4],"6704":[3,4]}}
 };
-var unit="";
+var dong="",ho="",unit="";
+function unitLabel(){return dong?(ho?dong+"동 "+ho+"호":dong+"동 (호수 미선택)"):""}
 function won(n){return Math.round(n).toLocaleString("ko-KR")+"원"}
 function manwon(n){var e=Math.round(n),m=Math.floor(e/10000),r=e%10000;return m>0?m+"만 "+r.toLocaleString("ko-KR")+"원":e.toLocaleString("ko-KR")+"원"}
 function bandLabel(f){return f<0?"층 무관(대표층 5~9층 기준)":BANDS[f]}
@@ -498,16 +508,27 @@ function chipGroup(id,fn){
   el.classList.add("sel");fn(el);render();
  });
 }
-function fillUnits(){
- var su=document.getElementById("selUnit"),list=UNITS[document.getElementById("selType").value][document.getElementById("selZone").value],h='<option value="">선택 안 함</option>';
- list.forEach(function(u){h+='<option value="'+u+'">'+u+'</option>'});
+function fillDong(){
+ var mg=DONGS[document.getElementById("selType").value][document.getElementById("selZone").value],h='<option value="">동 선택</option>';
+ Object.keys(mg).sort().forEach(function(dg){h+='<option value="'+dg+'">'+dg+'동</option>'});
+ document.getElementById("selDong").innerHTML=h;
+ document.getElementById("selHo").innerHTML='<option value="">호 선택</option>';
+ dong="";ho="";unit="";
+}
+function fillHo(){
+ var arr=DONGS[document.getElementById("selType").value][document.getElementById("selZone").value][dong],h='<option value="">호 선택</option>';
+ if(arr)arr.forEach(function(n){h+='<option value="'+n+'">'+n+'호</option>'});
+ document.getElementById("selHo").innerHTML=h;
+ ho="";unit=unitLabel();
+});
  su.innerHTML=h;
 }
-document.getElementById("selZone").addEventListener("change",function(){zone=this.value;fillUnits();render()});
-document.getElementById("selType").addEventListener("change",function(){type=this.value;fillUnits();render()});
+document.getElementById("selZone").addEventListener("change",function(){zone=this.value;fillDong();render()});
+document.getElementById("selType").addEventListener("change",function(){type=this.value;fillDong();render()});
 document.getElementById("selFloor").addEventListener("change",function(){fl=+this.value;render()});
-document.getElementById("selUnit").addEventListener("change",function(){unit=this.value;render()});
-fillUnits();
+document.getElementById("selDong").addEventListener("change",function(){dong=this.value;fillHo();render()});
+document.getElementById("selHo").addEventListener("change",function(){ho=this.value;unit=unitLabel();render()});
+fillDong();
 function stepLoan(d){loan=Math.min(0.7,Math.max(0.1,Math.round((loan+d)*10)/10));document.getElementById("loanBar").value=Math.round(loan*100);render()}
 document.getElementById("loanBar").addEventListener("input",function(){loan=(+this.value)/100;render()});
 function stepRate(d){rate=Math.min(6,Math.max(1,Math.round((rate+d)*10)/10));document.getElementById("rateBar").value=rate;render()}
